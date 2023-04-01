@@ -1,17 +1,19 @@
-from tkinter import *
+from typing import Optional, Tuple, Union
+
+import customtkinter as ctk
+import screens.login
 
 
-class App(Tk):
-    def __init__(
-        self,
-        screenName: str | None = None,
-        baseName: str | None = None,
-        className: str = "Tk",
-        useTk: bool = True,
-        sync: bool = False,
-        use: str | None = None,
-    ) -> None:
-        super().__init__(screenName, baseName, className, useTk, sync, use)
+class App(ctk.CTk):
+    def __init__(self, fg_color: Optional[Union[str, Tuple[str, str]]] = None, **kwargs):
+        super().__init__(fg_color, **kwargs)
+        self.geometry("1366x768")
+        self.draw_login()
+    
+    def draw_login(self):
+        loginFrame = screens.login.Login(self)
+        loginFrame.pack()
+
 
 if __name__ == "__main__":
     app = App()
