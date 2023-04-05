@@ -10,6 +10,7 @@ class App(ctk.CTk):
     ):
         super().__init__(fg_color, **kwargs)
         self.geometry("1366x768")
+        self.minsize(1366, 768)
         self.draw_login()
 
     def draw_login(self):
