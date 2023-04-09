@@ -1,6 +1,4 @@
 import os
-from textwrap import fill
-from tokenize import String
 from typing import Optional, Tuple, Union
 
 from PIL import Image
@@ -9,9 +7,13 @@ import customtkinter as ctk
 
 
 class Login(ctk.CTkFrame):
+
+    fullscreen: bool = False
+
+
     def __init__(
         self,
-        master: any, # type: ignore
+        master: any,  # type: ignore
         width: int = 500,
         height: int = 500,
         corner_radius: Optional[Union[int, str]] = None,
@@ -39,41 +41,69 @@ class Login(ctk.CTkFrame):
             **kwargs,
         )
 
+        self.__uname_variable = ctk.StringVar()
+        self.__passwd_variable = ctk.StringVar()
+        
         image_path = os.path.join(os.path.dirname(os.getcwd()), "media")
         # self.logo_image = ctk.CTkImage(Image.open(os.path.join(image_path, "mega_mart_logo.png")), size=("150x150"))
         # self.bind("<F11>", command=self.toggle_fullscreen)
         self.draw()
 
     def draw(self):
-        #setup grid 2x1
+        # setup grid 2x1
         self.grid_rowconfigure(0, weight=1)
-        self.grid_columnconfigure(1, weight = 1)
+        self.grid_columnconfigure(1, weight=1)
 
         # load images
         try:
             self.image_path = os.path.join(os.getcwd(), "media")
         except:
             raise FileNotFoundError("Folder does not exist in file tree: ./media/")
-        
-        self.image_logo = ctk.CTkImage(Image.open(os.path.join(self.image_path, "mega_mart_logo.png")), size=(500, 500))
+
+        self.image_logo = ctk.CTkImage(
+            Image.open(os.path.join(self.image_path, "mega_mart_logo.png")),
+            size=(500, 500),
+        )
 
         # logo frame
-        self.frame_logo: ctk.CTkFrame = ctk.CTkFrame(self, bg_color="yellow", width=500, corner_radius=0)
-        self.frame_logo.grid(row = 0, column = 0, sticky = "nsew")
-        
-        self.logo_label: ctk.CTkLabel = ctk.CTkLabel(self.frame_logo, image=self.image_logo, text = "")
-        self.logo_label.place(relx = 0.5, rely = 0.5, anchor = "center")
+        self.frame_logo: ctk.CTkFrame = ctk.CTkFrame(
+            self, bg_color="yellow", width=500, corner_radius=0
+        )
+        self.frame_logo.grid(row=0, column=0, sticky="nsew")
+
+        self.logo_label: ctk.CTkLabel = ctk.CTkLabel(
+            self.frame_logo, image=self.image_logo, text=""
+        )
+        self.logo_label.place(relx=0.5, rely=0.5, anchor="center")
 
         # credential frame
         self.frame_credential: ctk.CTkFrame = ctk.CTkFrame(self, bg_color="green")
-        self.frame_credential.grid(row = 0, column = 1, sticky = "nsew")
-        
+        self.frame_credential.grid(row=0, column=1, sticky="nsew")
 
-    fullscreen: bool = False
+        self.entry_uname = ctk.CTkEntry(
+            self.frame_credential, textvariable=self.__uname_variable
+        )
+        self.entry_passwd = ctk.CTkEntry(
+            self.frame_credential, textvariable=self.__passwd_variable, placeholder_text="Password", show = "*"
+        )
+
+
+        self.button_sumbit = ctk.CTkButton(self.frame_credential, text="Submit", command= lambda: self._login_event(self.entry_uname, self.entry_passwd))
+
+        self.entry_uname.grid(row = 0, column = 0)
+        self.entry_passwd.grid(row = 1, column = 0)
+        self.button_sumbit.grid(row = 2, column = 0, sticky = "e")
 
     def toggle_fullscreen(self) -> None:
         self.fullscreen = not (self.fullscreen)
-        self.master.attributes("-fullscreen", self.fullscreen) # type: ignore
+        self.master.attributes("-fullscreen", self.fullscreen)  # type: ignore
+
+    # TODO: add cryptography
+    def _login_event(self, entry_uname: ctk.CTkEntry, entry_passwd: ctk.CTkEntry):
+        self.uname: str = entry_uname.get()
+        self.passwd: str = entry_passwd.get()
+
+        print(f"Username = {self.uname} \n Password = {self.passwd}")
 
 
 if __name__ == "__main__":
@@ -82,5 +112,8 @@ if __name__ == "__main__":
     app.minsize(1366, 768)
     app.grid_rowconfigure(0, weight=1)
     app.grid_columnconfigure(0, weight=1)
-    Login(app).grid(row=0, column=0, sticky ="nsew")
+
+    frame_login = Login(app)
+    frame_login.grid(row=0, column=0, sticky="nsew")
+
     app.mainloop()
