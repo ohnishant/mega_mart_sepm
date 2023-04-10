@@ -110,6 +110,7 @@ if __name__ == "__main__":
     app = ctk.CTk()
     app.geometry(f"{1366}x{768}")
     app.minsize(1366, 768)
+    app.title("Login Page")
     app.grid_rowconfigure(0, weight=1)
     app.grid_columnconfigure(0, weight=1)
 
