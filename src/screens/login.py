@@ -49,7 +49,7 @@ class Login(ctk.CTkFrame):
         # self.bind("<F11>", command=self.toggle_fullscreen)
         self.draw()
 
-    def draw(self):
+    def draw(self) -> None:
         # setup grid 2x1
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -99,7 +99,7 @@ class Login(ctk.CTkFrame):
         self.master.attributes("-fullscreen", self.fullscreen)  # type: ignore
 
     # TODO: add cryptography
-    def _login_event(self, entry_uname: ctk.CTkEntry, entry_passwd: ctk.CTkEntry):
+    def _login_event(self, entry_uname: ctk.CTkEntry, entry_passwd: ctk.CTkEntry) -> None:
         self.uname: str = entry_uname.get()
         self.passwd: str = entry_passwd.get()
 

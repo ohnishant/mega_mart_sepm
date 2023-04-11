@@ -15,7 +15,7 @@ class App(ctk.CTk):
 
     def draw_login(self):
         loginFrame = screens.login.Login(self, bg_color="Green")
-        loginFrame.pack()
+        loginFrame.pack(fill = "both", expand = True)
 
 
 if __name__ == "__main__":
