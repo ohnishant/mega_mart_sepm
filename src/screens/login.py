@@ -10,7 +10,13 @@ import customtkinter as ctk
 class Login(ctk.CTkFrame):
 
     fullscreen: bool = False
-
+    '''
+    Login Frame:
+    Contains the logic and widgets for login
+    Arguments:
+    master: The containing widget for the frame
+    fn_login: The function to be called when login succeeds
+    '''
 
     def __init__(
         self,
@@ -49,6 +55,7 @@ class Login(ctk.CTkFrame):
         image_path = os.path.join(os.path.dirname(os.getcwd()), "media")
         # self.logo_image = ctk.CTkImage(Image.open(os.path.join(image_path, "mega_mart_logo.png")), size=("150x150"))
         # self.bind("<F11>", command=self.toggle_fullscreen)
+        # I hate this
         self.draw(fn_login= fn_login)
 
     def draw(self, fn_login: Callable) -> None:
@@ -89,8 +96,9 @@ class Login(ctk.CTkFrame):
             self.frame_credential, textvariable=self.__passwd_variable, placeholder_text="Password", show = "*"
         )
 
-
-        self.button_sumbit = ctk.CTkButton(self.frame_credential, text="Submit", command= lambda: self._login_event(self.entry_uname, self.entry_passwd, fn_login))
+        # Hate this again
+        self.button_sumbit = ctk.CTkButton(self.frame_credential, text="Submit")
+        self.button_sumbit.config(command= lambda: self._login_event(self.entry_uname, self.entry_passwd, fn_login))
 
         self.entry_uname.grid(row = 0, column = 0)
         self.entry_passwd.grid(row = 1, column = 0)
