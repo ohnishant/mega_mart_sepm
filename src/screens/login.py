@@ -98,7 +98,7 @@ class Login(ctk.CTkFrame):
 
         # Hate this again
         self.button_sumbit = ctk.CTkButton(self.frame_credential, text="Submit")
-        self.button_sumbit.config(command= lambda: self._login_event(self.entry_uname, self.entry_passwd, fn_login))
+        self.button_sumbit.configure(command= lambda: self._login_event(self.entry_uname, self.entry_passwd, fn_login))
 
         self.entry_uname.grid(row = 0, column = 0)
         self.entry_passwd.grid(row = 1, column = 0)
