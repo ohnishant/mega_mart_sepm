@@ -12,10 +12,22 @@ class App(ctk.CTk):
         self.geometry("1366x768")
         self.minsize(1366, 768)
         self.draw_login()
+    
+    def _clear_contents(self) -> None:
+        for child in self.winfo_children():
+            child.destroy()
 
     def draw_login(self):
-        loginFrame = screens.login.Login(self, bg_color="Green")
+        self._clear_contents()
+        loginFrame = screens.login.Login(self, self.draw_checkout, bg_color="Green")
         loginFrame.pack(fill = "both", expand = True)
+    
+    # TODO 
+    def draw_checkout(self):
+        self._clear_contents()
+        print("Drawing checkout screen")
+        self.button_logout: ctk.CTkButton = ctk.CTkButton(self,text="Log Out", command=self.draw_login)
+        self.button_logout.pack()
 
 
 if __name__ == "__main__":

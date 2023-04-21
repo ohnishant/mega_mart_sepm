@@ -1,5 +1,6 @@
+from ast import Call
 import os
-from typing import Optional, Tuple, Union
+from typing import Optional, Tuple, Union, Callable
 
 from PIL import Image
 
@@ -14,6 +15,7 @@ class Login(ctk.CTkFrame):
     def __init__(
         self,
         master: any,  # type: ignore
+        fn_login: Callable,
         width: int = 500,
         height: int = 500,
         corner_radius: Optional[Union[int, str]] = None,
@@ -47,9 +49,9 @@ class Login(ctk.CTkFrame):
         image_path = os.path.join(os.path.dirname(os.getcwd()), "media")
         # self.logo_image = ctk.CTkImage(Image.open(os.path.join(image_path, "mega_mart_logo.png")), size=("150x150"))
         # self.bind("<F11>", command=self.toggle_fullscreen)
-        self.draw()
+        self.draw(fn_login= fn_login)
 
-    def draw(self) -> None:
+    def draw(self, fn_login: Callable) -> None:
         # setup grid 2x1
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -58,7 +60,7 @@ class Login(ctk.CTkFrame):
         try:
             self.image_path = os.path.join(os.getcwd(), "media")
         except:
-            raise FileNotFoundError("Folder does not exist in file tree: ./media/")
+            raise FileNotFoundError("Folder does not exist in file tree: ./media/\n Are you at project root?")
 
         self.image_logo = ctk.CTkImage(
             Image.open(os.path.join(self.image_path, "mega_mart_logo.png")),
@@ -88,7 +90,7 @@ class Login(ctk.CTkFrame):
         )
 
 
-        self.button_sumbit = ctk.CTkButton(self.frame_credential, text="Submit", command= lambda: self._login_event(self.entry_uname, self.entry_passwd))
+        self.button_sumbit = ctk.CTkButton(self.frame_credential, text="Submit", command= lambda: self._login_event(self.entry_uname, self.entry_passwd, fn_login))
 
         self.entry_uname.grid(row = 0, column = 0)
         self.entry_passwd.grid(row = 1, column = 0)
@@ -99,11 +101,12 @@ class Login(ctk.CTkFrame):
         self.master.attributes("-fullscreen", self.fullscreen)  # type: ignore
 
     # TODO: add cryptography
-    def _login_event(self, entry_uname: ctk.CTkEntry, entry_passwd: ctk.CTkEntry) -> None:
+    def _login_event(self, entry_uname: ctk.CTkEntry, entry_passwd: ctk.CTkEntry, fn_login: Callable) -> None:
         self.uname: str = entry_uname.get()
         self.passwd: str = entry_passwd.get()
+        fn_login()
 
-        print(f"Username = {self.uname} \n Password = {self.passwd}")
+        
 
 
 if __name__ == "__main__":
@@ -114,7 +117,7 @@ if __name__ == "__main__":
     app.grid_rowconfigure(0, weight=1)
     app.grid_columnconfigure(0, weight=1)
 
-    frame_login = Login(app)
+    frame_login = Login(app, lambda: print("A login was attempted"))
     frame_login.grid(row=0, column=0, sticky="nsew")
 
     app.mainloop()
