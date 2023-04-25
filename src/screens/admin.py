@@ -33,6 +33,17 @@ class Admin(ctk.CTkFrame):
             overwrite_preferred_drawing_method,
             **kwargs
         )
+        self.draw()
+
+    # TODO: Implement this page
+    def _logout(self):
+        quit(code=0)
+
+    def draw(self):
+        self.unimplemented = ctk.CTkLabel(self, text="This page is not implemented yet")
+        self.logout_button = ctk.CTkButton(self, text="Logout", command=self._logout)
+        self.unimplemented.pack()
+        self.logout_button.pack()
 
 
 if __name__ == "__main__":
