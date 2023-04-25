@@ -36,20 +36,31 @@ class App(ctk.CTk):
             )
 
         return sqlite3.connect(database=db_path)
+    
+    def pre_login(self, user_type: str):
+        if user_type == "admin":
+            self.draw_admin()
+        elif user_type == "customer":
+            self.draw_checkout()
+        else:
+            raise ValueError("Invalid user type")
 
     def draw_login(self):
         self._clear_contents()
-        loginFrame = screens.login.Login(self, self.draw_checkout, bg_color="Green", db_cursor=self.cur)
+        loginFrame = screens.login.Login(self, fn_login= self.draw_checkout, fn_admin=self.draw_admin, bg_color="Green", db_cursor=self.cur)
         loginFrame.pack(fill="both", expand=True)
-        
+
+    def draw_admin(self):
+        self._clear_contents()
+        adminFrame = screens.admin.Admin(self, bg_color="Red")
+        adminFrame.pack(fill="both", expand=True)
+
     # TODO
     def draw_checkout(self):
         self._clear_contents()
         print("Drawing checkout screen")
-        self.button_logout: ctk.CTkButton = ctk.CTkButton(
-            self, text="Log Out", command=self.draw_login
-        )
-        self.button_logout.pack()
+        checkoutFrame = screens.checkout.Checkout(self, db_cursor=self.cur)
+        checkoutFrame.pack(fill="both", expand=True)
 
 
 if __name__ == "__main__":
