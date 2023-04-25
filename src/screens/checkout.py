@@ -7,7 +7,7 @@ class Checkout(ctk.CTkFrame):
     def __init__(
         self,
         master: any,  # type: ignore
-        db_cursor = None,
+        db_cursor=None,
         width: int = 200,
         height: int = 200,
         corner_radius: Optional[Union[int, str]] = None,
@@ -34,24 +34,45 @@ class Checkout(ctk.CTkFrame):
             overwrite_preferred_drawing_method,
             **kwargs,
         )
+        self.db_cursor = db_cursor
         self.draw()
 
     active_cart: dict = dict()
     color_toggle: int = 0
 
     def draw(self):
+        # initialize frame dimensions
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+        
         cart_item_height = 75
+
+        self.details_frame = ctk.CTkFrame(self)
+        self.details_frame.grid(row=0, column=0, sticky="nsew")
+
+        self.cart_frame_container = ctk.CTkFrame(self, bg_color="red", width=650)
+        self.cart_frame_container.grid(row=0, column=1, sticky="nsew")
+
         self.cart_frame = ctk.CTkScrollableFrame(
-            self, width=500, height=cart_item_height * 6
+            self.cart_frame_container,
+            width=500,
+            height=cart_item_height * 7,
         )
         self.cart_frame.configure(label_text="Your Cart")
-        self.cart_frame.pack()
-        self.button_add_item = ctk.CTkButton(
-            self,
-            text="add item to frame",
-            command=lambda: self.__add_item_to_cart(id=123),
-        )
-        self.button_add_item.pack()
+        # self.cart_frame.pack(anchor="center")
+        self.cart_frame.place(relx=0.5, rely=0.5, anchor="center")
+
+        # self.cart_frame = ctk.CTkScrollableFrame(
+        #     self, width=500, height=cart_item_height * 6
+        # )
+        # self.cart_frame.configure(label_text="Your Cart")
+        # self.cart_frame.pack()
+        # self.button_add_item = ctk.CTkButton(
+        #     self,
+        #     text="add item to frame",
+        #     command=lambda: self.__add_item_to_cart(id=123),
+        # )
+        # self.button_add_item.pack()
 
     def __add_item_to_cart(self, id: int):
         item = (123, "hi this is an item", "metadata")
